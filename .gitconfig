@@ -1,0 +1,25 @@
+[diff]
+      tool = default-difftool
+
+[difftool "default-difftool"]
+      cmd = vim -f '+next' '+execute \"DirDiff\" argv(0) argv(1)' $LOCAL $REMOTE
+
+[difftool]
+      prompt = false
+
+[user]
+    email = gryf73@gmail.com
+    name = gryf
+[color]
+	ui = auto
+
+[alias]
+    ci = commit
+    st = status
+    co = checkout
+    l = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n''          %C(white)%s%C(reset) %C(dim white)- %an%C(reset)' --all
+    g = log --graph --date-order -C -M --pretty=format:\"<%h> %ad [%an] %Cgreen%d%Creset %s\" --all --date=short
+	aliases = !git config --get-regexp 'alias.*' | colrm 1 6 | sed 's/[ ]/ = /' | sort
+
+[push]
+	default = simple
