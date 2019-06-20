@@ -3,7 +3,7 @@
 # 1. update
 sudo apt update && sudo apt -y upgrade
 
-lsb_release -a 2>/dev/null | grep -q bionic
+lsb_release -cs 2>/dev/null | grep -q bionic
 if [[ $? -eq 0 ]]; then
     PGS="vim-gtk mc python-jedi python3-jedi htop python-flake8 python3-flake8 exuberant-ctags pylint flake8 pylint3 git-review silversearcher-ag python-apsw ccze python-pip"
 else
