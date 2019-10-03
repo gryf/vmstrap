@@ -20,8 +20,10 @@ export EDITOR="vim"
 EOF
 
 # 5. install tools from pypi
-sudo pip install pip --upgrade
-sudo pip install remote_pdb rainbow
+if $(pip list |grep -e rainbow -e remote-pdb|wc -l|grep -qv 2); then
+    sudo pip install pip --upgrade
+    sudo pip install remote_pdb rainbow
+fi
 
 # 6. copy configuration for bash, git, tmux
 sudo cp .bash_prompt ~/
@@ -30,16 +32,18 @@ sudo cp .gitconfig ~/
 echo '. ~/.bash_prompt' >> ~/.bashrc
 
 # 7. get my vim config
-git clone https://github.com/gryf/.vim ~/.vim
-# populate plugins
-vim -c ':PlugUpdate' -c ':qa!'
-# showmarks is a stubborn one
-mkdir ~/.vim/bundle/ShowMarks/doc
+if [ ! -d ~/.vim ]; then
+    git clone https://github.com/gryf/.vim ~/.vim
+    # populate plugins
+    vim -c ':PlugUpdate' -c ':qa!'
+    # showmarks is a stubborn one
+    mkdir ~/.vim/bundle/ShowMarks/doc
+fi
 
 # make current user sudo passwordless
-cat <<EOF >>/tmp/${USER}.sudo
-${USER} ALL = (ALL) NOPASSWD: ALL
-EOF
-sudo mv /tmp/${USER}.sudo /etc/sudoers.d/
+if [ -z "$(sudo grep "${USER}" /etc/sudoers)" ]; then
+    sudo "echo ${USER} ALL = (ALL) NOPASSWD: ALL >> /etc/sudoers"
+fi
 
-git clone https://opendev.org/openstack/devstack
+# clone devstack
+git clone https://opendev.org/openstack/devstack ~/
