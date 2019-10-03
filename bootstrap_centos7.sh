@@ -42,4 +42,4 @@ ${USER} ALL = (ALL) NOPASSWD: ALL
 EOF
 sudo mv /tmp/${USER}.sudo /etc/sudoers.d/
 
-git clone clone https://opendev.org/openstack/devstack
+git clone https://opendev.org/openstack/devstack
