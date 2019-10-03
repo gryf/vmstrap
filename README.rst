@@ -1,4 +1,4 @@
 VM strap
 ========
 
-Bootstrap for freshly created ubuntu vm.
+Bootstrap freshly created VM with ubuntu or centos
