@@ -1,7 +1,7 @@
 #!/bin/bash -x
 
 # 1. update
-sudo yum -i install epel-release
+sudo yum -y install epel-release
 sudo yum -y update
 
 # rxvt-unicode-256color to have proper terminfo
