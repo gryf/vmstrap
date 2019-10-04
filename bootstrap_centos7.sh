@@ -46,4 +46,4 @@ if [ -z "$(sudo grep "${USER}" /etc/sudoers)" ]; then
 fi
 
 # clone devstack
-git clone https://opendev.org/openstack/devstack ~/
+git clone https://opendev.org/openstack/devstack ~/devstack
