@@ -22,6 +22,7 @@ echo 'export EDITOR="vim"' | sudo tee -a /etc/profile.d/vim.sh
 if $(pip list |grep -e rainbow -e remote-pdb|wc -l|grep -qv 2); then
     sudo pip install pip --upgrade
     sudo pip install remote_pdb rainbow
+    sudo pip install -U setuptools
 fi
 
 # 6. copy configuration for bash, git, tmux
