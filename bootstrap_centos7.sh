@@ -5,7 +5,7 @@ sudo yum -i install epel-release
 sudo yum -y update
 
 # rxvt-unicode-256color to have proper terminfo
-PGS="bash-completion vim mc python2-jedi python3.6-jedi htop python-flake8 python2-mccabe python36-mccabe ctags python2-pylint python2-pylint python36-pylint git-review the_silver_searcher python2-apsw python34-apsw ccze python2-pip python3-pip rxvt-unicode-256color tmux"
+PGS="bash-completion vim mc python2-jedi python3.6-jedi htop python-flake8 python2-mccabe python36-mccabe ctags python2-pylint python2-pylint python36-pylint git-review the_silver_searcher python2-apsw python34-apsw ccze python-pip python2-pip python3-pip rxvt-unicode-256color tmux jq"
 
 # 2. install tools
 sudo yum install -y $PGS
