@@ -14,10 +14,9 @@ sudo yum install -y $PGS
 sudo yum -y clean all
 
 # 4. set default editor
-sudo cat <<EOF >>/etc/profile.d/vim.sh
-export VISUAL="vim"
-export EDITOR="vim"
-EOF
+echo 'export VISUAL="vim"' | sudo tee /etc/profile.d/vim.sh
+echo 'export EDITOR="vim"' | sudo tee -a /etc/profile.d/vim.sh
+
 
 # 5. install tools from pypi
 if $(pip list |grep -e rainbow -e remote-pdb|wc -l|grep -qv 2); then
@@ -42,7 +41,7 @@ fi
 
 # make current user sudo passwordless
 if [ -z "$(sudo grep "${USER}" /etc/sudoers)" ]; then
-    sudo "echo ${USER} ALL = (ALL) NOPASSWD: ALL >> /etc/sudoers"
+    echo "${USER} ALL = (ALL) NOPASSWD: ALL" | sudo tee -a /etc/sudoers
 fi
 
 # clone devstack
