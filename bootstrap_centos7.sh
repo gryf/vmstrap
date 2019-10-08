@@ -1,4 +1,6 @@
-#!/bin/bash -x
+#!/bin/bash
+
+set -e
 
 # 1. update
 sudo yum -y install epel-release
@@ -19,10 +21,17 @@ echo 'export EDITOR="vim"' | sudo tee -a /etc/profile.d/vim.sh
 
 
 # 5. install tools from pypi
-if $(pip list |grep -e rainbow -e remote-pdb|wc -l|grep -qv 2); then
-    sudo pip install pip --upgrade
-    sudo pip install remote_pdb rainbow
-    sudo pip install -U setuptools
+sudo pip install -U pip setuptools
+installed_pkgs=$(pip list)
+pkgs_to_install=
+for pkg in remote_pdb pdbpp rainbow; do
+    if echo "${installed_pkgs}" | grep -qv "${pkg}"; then
+        pkgs_to_install="${pkgs_to_install} ${pkg}"
+    fi
+done
+
+if [ -n "${pkgs_to_install}" ]; then
+    sudo pip install ${pkgs_to_install}
 fi
 
 # 6. copy configuration for bash, git, tmux
