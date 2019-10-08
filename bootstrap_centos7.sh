@@ -60,3 +60,4 @@ fi
 
 # clone devstack
 git clone https://opendev.org/openstack/devstack ~/devstack
+cp kuryr.conf ~/devstack/local.conf
