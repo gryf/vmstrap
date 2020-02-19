@@ -73,7 +73,7 @@ echo 'export EDITOR="vim"' | sudo tee -a /etc/profile.d/vim.sh
 sudo pip install -U pip setuptools
 installed_pkgs=$(pip list)
 pkgs_to_install=
-for pkg in remote_pdb pdbpp rainbow; do
+for pkg in pdbpp rainbow; do
     if echo "${installed_pkgs}" | grep -qv "${pkg}"; then
         pkgs_to_install="${pkgs_to_install} ${pkg}"
     fi
@@ -81,6 +81,11 @@ done
 
 if [ -n "${pkgs_to_install}" ]; then
     sudo pip install ${pkgs_to_install}
+    sudo pip3 install ${pkgs_to_install}
+fi
+
+if [ $(pip3 list |grep remote_pdb|wc -l) -eq 0 ]; then
+    sudo pip install remote_pdb
 fi
 
 # 7. copy configuration for bash, git, tmux
