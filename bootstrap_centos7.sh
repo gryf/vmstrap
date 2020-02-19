@@ -51,23 +51,23 @@ sudo yum -y clean all
 echo 'export VISUAL="vim"' | sudo tee /etc/profile.d/vim.sh
 echo 'export EDITOR="vim"' | sudo tee -a /etc/profile.d/vim.sh
 
-# 5. install non-medieval version of vim
-wget ftp://ftp.pbone.net/mirror/ftp5.gwdg.de/pub/opensuse/repositories/home:/fusion809/CentOS_7/x86_64/vim-common-8.1.0875-1.1.x86_64.rpm
-wget ftp://ftp.pbone.net/mirror/ftp5.gwdg.de/pub/opensuse/repositories/home:/fusion809/CentOS_7/x86_64/vim-enhanced-8.1.0875-1.1.x86_64.rpm
-wget ftp://ftp.pbone.net/mirror/ftp5.gwdg.de/pub/opensuse/repositories/home:/fusion809/CentOS_7/x86_64/vim-icons-8.1.0875-1.1.x86_64.rpm
-wget ftp://ftp.pbone.net/mirror/ftp5.gwdg.de/pub/opensuse/repositories/home:/fusion809/CentOS_7/x86_64/vim-minimal-8.1.0875-1.1.x86_64.rpm
+# 5. install non-medieval version of vim (not working anymore)
+# wget ftp://ftp.pbone.net/mirror/ftp5.gwdg.de/pub/opensuse/repositories/home:/fusion809/CentOS_7/x86_64/vim-common-8.1.0875-1.1.x86_64.rpm
+# wget ftp://ftp.pbone.net/mirror/ftp5.gwdg.de/pub/opensuse/repositories/home:/fusion809/CentOS_7/x86_64/vim-enhanced-8.1.0875-1.1.x86_64.rpm
+# wget ftp://ftp.pbone.net/mirror/ftp5.gwdg.de/pub/opensuse/repositories/home:/fusion809/CentOS_7/x86_64/vim-icons-8.1.0875-1.1.x86_64.rpm
+# wget ftp://ftp.pbone.net/mirror/ftp5.gwdg.de/pub/opensuse/repositories/home:/fusion809/CentOS_7/x86_64/vim-minimal-8.1.0875-1.1.x86_64.rpm
 
-# this has to be run all at once, otherwise we will not have sudo for a
-# moment.
-sudo bash -c "yum -y remove vim-minimal vim-common vim-enhanced;
-    rpm -i vim-common-8.1.0875-1.1.x86_64.rpm \
-    vim-enhanced-8.1.0875-1.1.x86_64.rpm \
-    vim-icons-8.1.0875-1.1.x86_64.rpm \
-    vim-minimal-8.1.0875-1.1.x86_64.rpm;
-    yum -y install sudo"
+# # this has to be run all at once, otherwise we will not have sudo for a
+# # moment.
+# sudo bash -c "yum -y remove vim-minimal vim-common vim-enhanced;
+    # rpm -i vim-common-8.1.0875-1.1.x86_64.rpm \
+    # vim-enhanced-8.1.0875-1.1.x86_64.rpm \
+    # vim-icons-8.1.0875-1.1.x86_64.rpm \
+    # vim-minimal-8.1.0875-1.1.x86_64.rpm;
+    # yum -y install sudo"
 
-rm vim-common-8.1.0875-1.1.x86_64.rpm vim-enhanced-8.1.0875-1.1.x86_64.rpm \
-    vim-icons-8.1.0875-1.1.x86_64.rpm vim-minimal-8.1.0875-1.1.x86_64.rpm
+# rm vim-common-8.1.0875-1.1.x86_64.rpm vim-enhanced-8.1.0875-1.1.x86_64.rpm \
+    # vim-icons-8.1.0875-1.1.x86_64.rpm vim-minimal-8.1.0875-1.1.x86_64.rpm
 
 # 6. install tools from pypi
 sudo pip install -U pip setuptools
