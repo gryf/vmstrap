@@ -19,6 +19,7 @@ PGS="bash-completion
      make
      mc
      ptpython2
+     python-devel
      python-devel 
      python-flake8 
      python-ipython-console
@@ -28,12 +29,11 @@ PGS="bash-completion
      python2-mccabe 
      python2-pip
      python2-pylint 
-     python27-python-devel 
      python3-devel
      python3-pip
-     python3.6-jedi 
      python34-apsw 
      python36-devel 
+     python36-jedi 
      python36-mccabe
      python36-pylint 
      rxvt-unicode-256color
