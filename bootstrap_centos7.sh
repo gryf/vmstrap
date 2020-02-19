@@ -69,8 +69,8 @@ echo 'export EDITOR="vim"' | sudo tee -a /etc/profile.d/vim.sh
 # rm vim-common-8.1.0875-1.1.x86_64.rpm vim-enhanced-8.1.0875-1.1.x86_64.rpm \
     # vim-icons-8.1.0875-1.1.x86_64.rpm vim-minimal-8.1.0875-1.1.x86_64.rpm
 
-# 6. install tools from pypi
-sudo pip install -U pip setuptools
+# 6. install tools from pypi (only py3, no more latest setuptools for py2)
+sudo pip3 install -U pip setuptools
 installed_pkgs=$(pip list)
 pkgs_to_install=
 for pkg in pdbpp rainbow; do
