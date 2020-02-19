@@ -28,14 +28,12 @@ PGS="bash-completion
      python2-jedi 
      python2-mccabe 
      python2-pip
-     python2-pylint 
      python3-devel
      python3-pip
      python34-apsw 
      python36-devel 
      python36-jedi 
      python36-mccabe
-     python36-pylint 
      rxvt-unicode-256color
      the_silver_searcher 
      tmux
@@ -72,21 +70,17 @@ echo 'export EDITOR="vim"' | sudo tee -a /etc/profile.d/vim.sh
 # 6. install tools from pypi (only py3, no more latest setuptools for py2)
 sudo pip3 install -U pip setuptools
 installed_pkgs=$(pip list)
-pkgs_to_install=
-for pkg in pdbpp rainbow; do
+if echo "${installed_pkgs}" | grep -qv "rainbow"; then
+    sudo pip install rainbow
+    sudo pip3 install rainbow
+fi
+
+installed_pkgs=$(pip3 list)
+for pkg in remote_pdb pdbpp; do
     if echo "${installed_pkgs}" | grep -qv "${pkg}"; then
-        pkgs_to_install="${pkgs_to_install} ${pkg}"
+        sudo pip3 install ${pkg}
     fi
 done
-
-if [ -n "${pkgs_to_install}" ]; then
-    sudo pip install ${pkgs_to_install}
-    sudo pip3 install ${pkgs_to_install}
-fi
-
-if [ $(pip3 list |grep remote_pdb|wc -l) -eq 0 ]; then
-    sudo pip install remote_pdb
-fi
 
 # 7. copy configuration for bash, git, tmux
 sudo cp .bash_prompt ~/
