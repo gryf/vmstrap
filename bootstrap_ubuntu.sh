@@ -14,7 +14,7 @@ fi
 sudo apt install -y $PGS
 
 # 3. cleanup
-sudo apt-get autoremove && sudo apt-get autoclean
+sudo apt-get autoremove -y && sudo apt-get autoclean -y
 
 # 4. set default editor
 sudo update-alternatives --set editor /usr/bin/vim.gtk-py2
