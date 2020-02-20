@@ -35,3 +35,7 @@ git clone https://github.com/gryf/.vim ~/.vim
 vim -c ':PlugUpdate' -c ':qa!' ${STACKUSER}
 # showmarks is a stubborn one
 mkdir ~/.vim/bundle/ShowMarks/doc ${STACKUSER}
+
+# clone devstack
+git clone https://opendev.org/openstack/devstack ~/devstack
+cp kuryr.conf ~/devstack/local.conf
