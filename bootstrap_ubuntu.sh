@@ -5,9 +5,35 @@ sudo apt update && sudo apt -y upgrade
 
 lsb_release -cs 2>/dev/null | grep -q bionic
 if [[ $? -eq 0 ]]; then
-    PGS="vim-gtk mc python-jedi python3-jedi htop python-flake8 python3-flake8 exuberant-ctags pylint flake8 pylint3 git-review silversearcher-ag python-apsw ccze python-pip"
+    PGS="ccze 
+    exuberant-ctags
+    flake8
+    git-review
+    htop 
+    mc 
+    python-apsw
+    python-flake8
+    python-jedi
+    python-pip
+    python3-flake8 
+    python3-jedi 
+    silversearcher-ag
+    vim-gtk"
 else
-    PGS="vim-gtk-py2 mc python-jedi python3-jedi htop python-flake8 python3-flake8 exuberant-ctags pylint flake8 pylint3 git-review silversearcher-ag python-apsw ccze python-pip"
+    PGS="ccze 
+    exuberant-ctags 
+    flake8 
+    git-review 
+    htop 
+    mc 
+    python-apsw 
+    python-flake8 
+    python-jedi 
+    python-pip
+    python3-flake8 
+    python3-jedi
+    silversearcher-ag 
+    vim-gtk-py2"
 fi
 
 # 2. install tools
