@@ -83,9 +83,12 @@ for pkg in remote_pdb pdbpp; do
 done
 
 # 7. copy configuration for bash, git, tmux
-sudo cp .bash_prompt ~/
-sudo cp .tmux.conf ~/
-sudo cp .gitconfig ~/
+cp .bash_prompt ~/
+cp .tmux.conf ~/
+# v and y like vi in copy-mode
+echo "bind -t vi-copy 'v' begin-selection" >> ~/.tmux.conf
+echo "bind -t vi-copy 'y' copy-selection" >> ~/.tmux.conf
+cp .gitconfig ~/
 echo '. ~/.bash_prompt' >> ~/.bashrc
 
 # 8. get my vim config

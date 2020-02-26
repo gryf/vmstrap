@@ -57,9 +57,12 @@ sudo pip install pip --upgrade
 sudo pip install remote_pdb rainbow
 
 # 6. copy configuration for bash, git, tmux
-sudo cp .bash_prompt ~/
-sudo cp .tmux.conf ~/
-sudo cp .gitconfig ~/
+cp .bash_prompt ~/
+cp .tmux.conf ~/
+# v and y like vi in copy-mode
+echo "bind-key -T copy-mode-vi 'v' send -X begin-selection" >> ~/.tmux.conf
+echo "bind-key -T copy-mode-vi 'y' send -X copy-selection" >> ~/.tmux.conf
+cp .gitconfig ~/
 echo '. ~/.bash_prompt' >> ~/.bashrc
 
 # 7. get my vim config
