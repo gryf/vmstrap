@@ -1,10 +1,11 @@
 #!/bin/bash -x
 
 # 0. network. paste it to the machine before running this script
-# sudo echo "network: {config: disabled}" > /etc/cloud/cloud.cfg.d/99-disable-network-config.cfg
+# sudo sh -c 'echo "network: {config: disabled}" > /etc/cloud/cloud.cfg.d/99-disable-network-config.cfg'
 # sudo netplan apply
-# sudo sh -c 'echo "nameserver 1.1.1.1" > /etc/resolv.conf'
+# sudo sh -c 'rm /etc/resolv.conf; echo "nameserver 1.1.1.1" > /etc/resolv.conf'
 # sudo sed -i -e "s/127.0.0.1 localhost/127.0.0.1 localhost ${HOSTNAME}/" /etc/hosts
+# git clone https://github.com/gryf/vmstrap && cd vmstrap
 
 # 1. update
 sudo apt update && sudo apt -y upgrade
