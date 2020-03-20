@@ -19,7 +19,7 @@ if [[ $? -eq 0 ]]; then
     flake8
     git-review
     htop
-    ipython
+    ipython3
     mc
     python-apsw
     python-flake8
