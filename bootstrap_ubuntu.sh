@@ -1,45 +1,50 @@
 #!/bin/bash -x
 
+# Sometimes, it might be needed to force external network to cooperate:
 # 0. network. paste it to the machine before running this script
-# sudo sh -c 'echo "network: {config: disabled}" > /etc/cloud/cloud.cfg.d/99-disable-network-config.cfg'
-# sudo netplan apply
 # sudo sh -c 'rm /etc/resolv.conf; echo "nameserver 1.1.1.1" > /etc/resolv.conf'
 # sudo sed -i -e "s/127.0.0.1 localhost/127.0.0.1 localhost ${HOSTNAME}/" /etc/hosts
-# git clone https://github.com/gryf/vmstrap && cd vmstrap
+# sudo sh -c 'echo "network: {config: disabled}" > /etc/cloud/cloud.cfg.d/99-disable-network-config.cfg'
+# sudo netplan apply
+# git clone https://github.com/gryf/vmstrap
+# cd vmstrap
 
 # 1. update
 sudo apt update && sudo apt -y upgrade
 
 lsb_release -cs 2>/dev/null | grep -q bionic
 if [[ $? -eq 0 ]]; then
-    PGS="ccze 
+    PGS="ccze
     exuberant-ctags
     flake8
     git-review
-    htop 
-    mc 
+    htop
+    ipython
+    mc
     python-apsw
     python-flake8
     python-jedi
     python-pip
-    python3-flake8 
-    python3-jedi 
+    python3-flake8
+    python3-jedi
     silversearcher-ag
+    tmate
     vim-gtk"
 else
-    PGS="ccze 
-    exuberant-ctags 
-    flake8 
-    git-review 
-    htop 
-    mc 
-    python-apsw 
-    python-flake8 
-    python-jedi 
+    PGS="ccze
+    exuberant-ctags
+    flake8
+    git-review
+    htop
+    ipython
+    mc
+    python-apsw
+    python-flake8
+    python-jedi
     python-pip
-    python3-flake8 
+    python3-flake8
     python3-jedi
-    silversearcher-ag 
+    silversearcher-ag
     vim-gtk-py2"
 fi
 
