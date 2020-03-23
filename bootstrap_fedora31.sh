@@ -43,6 +43,7 @@ sudo cp .tmux.conf ~/
 sudo cp .gitconfig ~/
 cp cleanup.sh ~/
 echo '. ~/.bash_prompt' >> ~/.bashrc
+echo "alias ip='ip -c'" >> ~/.bashrc
 
 # 7. get my vim config
 if [ ! -d ~/.vim ]; then

@@ -91,6 +91,7 @@ echo "bind -t vi-copy 'y' copy-selection" >> ~/.tmux.conf
 cp .gitconfig ~/
 cp cleanup.sh ~/
 echo '. ~/.bash_prompt' >> ~/.bashrc
+echo "alias ip='ip -c'" >> ~/.bashrc
 
 # 8. get my vim config
 if [ ! -d ~/.vim ]; then

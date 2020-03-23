@@ -70,6 +70,7 @@ echo "bind-key -T copy-mode-vi 'y' send -X copy-selection" >> ~/.tmux.conf
 cp .gitconfig ~/
 cp cleanup.sh ~/
 echo '. ~/.bash_prompt' >> ~/.bashrc
+echo "alias ip='ip -c'" >> ~/.bashrc
 
 # 7. get my vim config
 git clone https://github.com/gryf/.vim ~/.vim
