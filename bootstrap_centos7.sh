@@ -89,6 +89,7 @@ cp .tmux.conf ~/
 echo "bind -t vi-copy 'v' begin-selection" >> ~/.tmux.conf
 echo "bind -t vi-copy 'y' copy-selection" >> ~/.tmux.conf
 cp .gitconfig ~/
+cp cleanup.sh ~/
 echo '. ~/.bash_prompt' >> ~/.bashrc
 
 # 8. get my vim config

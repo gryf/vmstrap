@@ -41,6 +41,7 @@ fi
 sudo cp .bash_prompt ~/
 sudo cp .tmux.conf ~/
 sudo cp .gitconfig ~/
+cp cleanup.sh ~/
 echo '. ~/.bash_prompt' >> ~/.bashrc
 
 # 7. get my vim config

@@ -68,6 +68,7 @@ cp .tmux.conf ~/
 echo "bind-key -T copy-mode-vi 'v' send -X begin-selection" >> ~/.tmux.conf
 echo "bind-key -T copy-mode-vi 'y' send -X copy-selection" >> ~/.tmux.conf
 cp .gitconfig ~/
+cp cleanup.sh ~/
 echo '. ~/.bash_prompt' >> ~/.bashrc
 
 # 7. get my vim config
