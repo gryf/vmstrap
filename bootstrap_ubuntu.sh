@@ -74,7 +74,7 @@ cp cleanup.sh ~/
     echo 'source ~/.bash_prompt'
     echo "alias ip='ip -c'"
     echo "alias skctl='kubectl -n kube-system'"
-    echo "source ~/devstack openrc admin admin >/dev/null 2>/dev/null'"
+    echo "source ~/devstack/openrc admin admin >/dev/null 2>/dev/null"
 } >> ~/.bashrc
 
 # 7. get my vim config
