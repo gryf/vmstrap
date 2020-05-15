@@ -27,21 +27,36 @@ COMMON_PGS=(ccze
     mc
     tmux)
 
+COMMON_RPM=(bash-completion
+    ctags
+    gcc
+    gcc-c++
+    kernel-devel
+    make
+    python3-devel
+    python3-pip
+    rxvt-unicode-256color
+    the_silver_searcher
+    vim)
+
+COMMON_DEB=(exuberant-ctags
+    flake8
+    python-apsw
+    python-flake8
+    python-jedi
+    python-pip
+    python3-flake8
+    python3-jedi
+    silversearcher-ag)
+
 centos7() {
     # 1. update
     sudo yum -y install epel-release
     sudo yum -y update
 
     # rxvt-unicode-256color to have proper terminfo
-    pgs=(bash-completion
-         ctags
-         gcc
-         gcc-c++
-         kernel-devel
-         make
-         ptpython2
+    PGS=(ptpython2
          python-devel
-         python-devel 
          python-flake8 
          python-ipython-console
          python-pip
@@ -49,18 +64,12 @@ centos7() {
          python2-jedi 
          python2-mccabe 
          python2-pip
-         python3-devel
-         python3-pip
          python34-apsw 
-         python36-devel 
          python36-jedi 
-         python36-mccabe
-         rxvt-unicode-256color
-         the_silver_searcher 
-         vim)
+         python36-mccabe)
 
     # 2. install tools
-    sudo yum install -y "${COMMON_PGS[@]}" "${PGS[@]}"
+    sudo yum install -y "${COMMON_PGS[@]}" "${COMMON_RPM[@]}" "${PGS[@]}"
 
     # 3. cleanup
     sudo yum -y clean all
@@ -139,30 +148,19 @@ fedora() {
 
     # rxvt-unicode-256color to have proper terminfo
 
-    PGS=(bash-completion
-        ctags
-        gcc
-        gcc-c++
-        kernel-devel
-        make
-        ptpython3
+    PGS=(ptpython3
         python2
         python2-devel
         python2-pip
         python3-apsw
-        python3-devel
         python3-flake8
         python3-ipython
         python3-jedi
         python3-mccabe
-        python3-pip
-        python3-pylint
-        rxvt-unicode-256color
-        the_silver_searcher
-        vim)
+        python3-pylint)
 
     # 2. install tools
-    sudo yum install -y "${COMMON_PGS[@]}" "${PGS[@]}"
+    sudo yum install -y "${COMMON_PGS[@]}" "${COMMON_RPM[@]}" "${PGS[@]}"
 
     # 3. cleanup
     sudo yum -y clean all
@@ -223,38 +221,30 @@ ubuntu() {
     # git clone https://github.com/gryf/vmstrap
     # cd vmstrap
 
+    case $DISTRO_R in
+        '16.04')
+            PGS=(ipython
+                vim-gtk-py2)
+            ;;
+        '18.04')
+            PGS=(ipython3
+                tmate
+                vim-gtk)
+            ;;
+        '20.04')
+            echo "20.04 is not yet supported"
+            exit 1
+            ;;
+        *)
+            echo "Unsupported Ubuntu version: ${DISTRO_R}"
+            ;;
+    esac
+
     # 1. update
     sudo apt update && sudo apt -y upgrade
 
-    if lsb_release -cs 2>/dev/null | grep -q bionic; then
-        PGS=(exuberant-ctags
-            flake8
-            ipython3
-            python-apsw
-            python-flake8
-            python-jedi
-            python-pip
-            python3-flake8
-            python3-jedi
-            silversearcher-ag
-            tmate
-            vim-gtk)
-    else
-        PGS=(exuberant-ctags
-            flake8
-            ipython
-            python-apsw
-            python-flake8
-            python-jedi
-            python-pip
-            python3-flake8
-            python3-jedi
-            silversearcher-ag
-            vim-gtk-py2)
-    fi
-
     # 2. install tools
-    sudo apt install -y "${COMMON_PGS[@]}" "${PGS[@]}"
+    sudo apt install -y "${COMMON_PGS[@]}" "${COMMON_DEB[@]}" "${PGS[@]}"
 
     # 3. cleanup
     sudo apt-get autoremove -y && sudo apt-get autoclean -y
