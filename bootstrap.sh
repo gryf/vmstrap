@@ -21,7 +21,7 @@ else
             # CentOS Linux release 7.6.1810 (Core)
             # We want only major, here: 7
             DISTRO_R=$(cut -f 4 -d ' ' /etc/redhat-release | cut -f 1 -d '.')
-        elif [[ $DISTRO_ID =~ fedora ]]; then 
+        elif [[ $DISTRO_ID =~ fedora ]]; then
             # Fedora release 32 (Thirty Two)
             DISTRO_R=$(cut -f 3 -d ' ' /etc/redhat-release)
         fi
@@ -29,7 +29,7 @@ else
 fi
 
 COMMON_PGS=(ccze
-    git-review 
+    git-review
     htop
     jq
     mc
@@ -57,71 +57,40 @@ COMMON_DEB=(exuberant-ctags
     python3-jedi
     silversearcher-ag)
 
-centos7() {
-    # 1. update
-    sudo yum -y install epel-release
-    sudo yum -y update
 
-    # rxvt-unicode-256color to have proper terminfo
-    PGS=(ptpython2
-         python-devel
-         python-flake8 
-         python-ipython-console
-         python-pip
-         python2-apsw 
-         python2-jedi 
-         python2-mccabe 
-         python2-pip
-         python34-apsw 
-         python36-jedi 
-         python36-mccabe)
-
-    # 2. install tools
-    sudo yum install -y "${COMMON_PGS[@]}" "${COMMON_RPM[@]}" "${PGS[@]}"
-
-    # 3. cleanup
-    sudo yum -y clean all
-
-    # 4. set default editor
-    echo 'export visual="vim"' | sudo tee /etc/profile.d/vim.sh
-    echo 'export editor="vim"' | sudo tee -a /etc/profile.d/vim.sh
-
-    # 5. install tools from pypi (only py3, no more latest setuptools for py2)
-    sudo pip3 install -u pip setuptools
-    installed_pkgs=$(pip list)
-    if echo "${installed_pkgs}" | grep -qv "rainbow"; then
-        sudo pip install rainbow
-        sudo pip3 install rainbow
+rpm_based() {
+    if [[ $DISTRO_ID == 'fedora' ]]; then
+        PGS=(ptpython3
+            python2
+            python2-devel
+            python2-pip
+            python3-apsw
+            python3-flake8
+            python3-ipython
+            python3-jedi
+            python3-mccabe
+            python3-pylint)
+    elif [[ $DISTRO_ID == 'centos' ]]; then
+        PGS=(ptpython2
+             python-devel
+             python-flake8
+             python-ipython-console
+             python-pip
+             python2-apsw
+             python2-jedi
+             python2-mccabe
+             python2-pip
+             python34-apsw
+             python36-jedi
+             python36-mccabe)
     fi
 
-    installed_pkgs=$(pip3 list)
-    for pkg in remote_pdb pdbpp; do
-        if echo "${installed_pkgs}" | grep -qv "${pkg}"; then
-            sudo pip3 install ${pkg}
-        fi
-    done
-
-    # 6. copy configuration for bash, git, tmux
-    common_conf
-}
-
-fedora() {
-    # fedora 31
     # 1. update
+    if [[ $DISTRO_ID == 'centos' ]]; then
+        # install epel repository for centos
+        sudo yum -y install epel-release
+    fi
     sudo yum -y update
-
-    # rxvt-unicode-256color to have proper terminfo
-
-    PGS=(ptpython3
-        python2
-        python2-devel
-        python2-pip
-        python3-apsw
-        python3-flake8
-        python3-ipython
-        python3-jedi
-        python3-mccabe
-        python3-pylint)
 
     # 2. install tools
     sudo yum install -y "${COMMON_PGS[@]}" "${COMMON_RPM[@]}" "${PGS[@]}"
@@ -133,19 +102,34 @@ fedora() {
     echo 'export VISUAL="vim"' | sudo tee /etc/profile.d/vim.sh
     echo 'export EDITOR="vim"' | sudo tee -a /etc/profile.d/vim.sh
 
-
     # 5. install tools from pypi
-    sudo pip install -U pip setuptools
-    installed_pkgs=$(pip list)
-    pkgs_to_install=
-    for pkg in remote_pdb pdbpp rainbow; do
-        if echo "${installed_pkgs}" | grep -qv "${pkg}"; then
-            pkgs_to_install="${pkgs_to_install} ${pkg}"
-        fi
-    done
+    if [[ $DISTRO_ID == 'fedora' ]]; then
+        sudo pip install -U pip setuptools
+        installed_pkgs=$(pip list)
+        pkgs_to_install=
+        for pkg in remote_pdb pdbpp rainbow; do
+            if echo "${installed_pkgs}" | grep -qv "${pkg}"; then
+                pkgs_to_install="${pkgs_to_install} ${pkg}"
+            fi
+        done
 
-    if [ -n "${pkgs_to_install}" ]; then
-        sudo pip install ${pkgs_to_install}
+        if [ -n "${pkgs_to_install}" ]; then
+            sudo pip install ${pkgs_to_install}
+        fi
+    elif [[ $DISTRO_ID == 'centos' ]]; then
+        sudo pip3 install -u pip setuptools
+        installed_pkgs=$(pip list)
+        if echo "${installed_pkgs}" | grep -qv "rainbow"; then
+            sudo pip install rainbow
+            sudo pip3 install rainbow
+        fi
+
+        installed_pkgs=$(pip3 list)
+        for pkg in remote_pdb pdbpp; do
+            if echo "${installed_pkgs}" | grep -qv "${pkg}"; then
+                sudo pip3 install ${pkg}
+            fi
+        done
     fi
 
     # 6. copy configuration for bash, git, tmux
@@ -223,7 +207,7 @@ common_conf() {
         # showmarks is a stubborn one
         mkdir ~/.vim/bundle/ShowMarks/doc
     fi
-    
+
     # make current user sudo passwordless
     #if [ -z "$(sudo grep "${USER}" /etc/sudoers)" ]; then
     #    echo "${USER} ALL = (ALL) NOPASSWD: ALL" | sudo tee -a /etc/sudoers
@@ -239,12 +223,12 @@ case $DISTRO_ID in
         ubuntu
         ;;
     "centos")
-        centos7
+        rpm_based
         ;;
-    "fedora")
-        fedora
+    "fedora")  # Fedora 31
+        rpm_based
         ;;
     *)
-        echo Distribution ${DISTRO_ID} not supported
+        echo "Distribution ${DISTRO_ID} not supported"
         ;;
 esac
