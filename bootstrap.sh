@@ -11,7 +11,8 @@
 set -e
 
 if command -v lsb_release 2>&1 > /dev/null; then
-    DISTRO_ID=$(lsb_release -i | cut -f 2 -d ':' | tr '[:upper:]' '[:lower:]')
+    DISTRO_ID=$(lsb_release -i | cut -f 2 -d ':' | xargs \
+        | tr '[:upper:]' '[:lower:]')
     DISTRO_R=$(lsb_release -r | awk '{print $2}')
 else
     if [[ -e /etc/redhat-release ]]; then
