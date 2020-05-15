@@ -112,33 +112,7 @@ centos7() {
     done
 
     # 7. copy configuration for bash, git, tmux
-    cp .bash_prompt ~/
-    cp .tmux.conf ~/
-    # v and y like vi in copy-mode
-    echo "bind -t vi-copy 'v' begin-selection" >> ~/.tmux.conf
-    echo "bind -t vi-copy 'y' copy-selection" >> ~/.tmux.conf
-    cp .gitconfig ~/
-    cp cleanup.sh ~/
-    echo '. ~/.bash_prompt' >> ~/.bashrc
-    echo "alias ip='ip -c'" >> ~/.bashrc
-
-    # 8. get my vim config
-    if [ ! -d ~/.vim ]; then
-        git clone https://github.com/gryf/.vim ~/.vim
-        # populate plugins
-        vim -c ':plugupdate' -c ':qa!'
-        # showmarks is a stubborn one
-        mkdir ~/.vim/bundle/showmarks/doc
-    fi
-
-    # make current user sudo passwordless
-    if [ -z "$(sudo grep "${user}" /etc/sudoers)" ]; then
-        echo "${user} all = (all) nopasswd: all" | sudo tee -a /etc/sudoers
-    fi
-
-    # clone devstack
-    git clone https://opendev.org/openstack/devstack ~/devstack
-    cp kuryr.conf ~/devstack/local.conf
+    common_conf
 }
 
 fedora() {
@@ -185,30 +159,7 @@ fedora() {
     fi
 
     # 6. copy configuration for bash, git, tmux
-    sudo cp .bash_prompt ~/
-    sudo cp .tmux.conf ~/
-    sudo cp .gitconfig ~/
-    cp cleanup.sh ~/
-    echo '. ~/.bash_prompt' >> ~/.bashrc
-    echo "alias ip='ip -c'" >> ~/.bashrc
-
-    # 7. get my vim config
-    if [ ! -d ~/.vim ]; then
-        git clone https://github.com/gryf/.vim ~/.vim
-        # populate plugins
-        vim -c ':PlugUpdate' -c ':qa!'
-        # showmarks is a stubborn one
-        mkdir ~/.vim/bundle/ShowMarks/doc
-    fi
-
-    # make current user sudo passwordless
-    if [ -z "$(sudo grep "${USER}" /etc/sudoers)" ]; then
-        echo "${USER} ALL = (ALL) NOPASSWD: ALL" | sudo tee -a /etc/sudoers
-    fi
-
-    # clone devstack
-    git clone https://opendev.org/openstack/devstack ~/devstack
-    cp kuryr.conf ~/devstack/local.conf
+    common_conf
 }
 
 ubuntu() {
@@ -257,13 +208,24 @@ ubuntu() {
     sudo pip install remote_pdb rainbow
 
     # 6. copy configuration for bash, git, tmux
+    common_conf
+}
+
+common_conf() {
     cp .bash_prompt ~/
     cp .tmux.conf ~/
     # v and y like vi in copy-mode
-    {
-        echo "bind-key -T copy-mode-vi 'v' send -X begin-selection"
-        echo "bind-key -T copy-mode-vi 'y' send -X copy-selection"
-    } >> ~/.tmux.conf
+    if [[ $DISTRO_ID == 'centos' ]]; then
+        {
+            echo "bind -t vi-copy 'v' begin-selection"
+            echo "bind -t vi-copy 'y' copy-selection"
+        } >> ~/.tmux.conf
+    else
+        {
+            echo "bind-key -T copy-mode-vi 'v' send -X begin-selection"
+            echo "bind-key -T copy-mode-vi 'y' send -X copy-selection"
+        } >> ~/.tmux.conf
+    fi
     cp .gitconfig ~/
     cp cleanup.sh ~/
     {
@@ -273,12 +235,18 @@ ubuntu() {
         echo "source ~/devstack/openrc admin admin >/dev/null 2>/dev/null"
     } >> ~/.bashrc
 
-    # 7. get my vim config
-    git clone https://github.com/gryf/.vim ~/.vim
-    # populate plugins
-    vim -c ':PlugUpdate' -c ':qa!'
-    # showmarks is a stubborn one
-    mkdir ~/.vim/bundle/ShowMarks/doc
+    if [ ! -d ~/.vim ]; then
+        git clone https://github.com/gryf/.vim ~/.vim
+        # populate plugins
+        vim -c ':PlugUpdate' -c ':qa!'
+        # showmarks is a stubborn one
+        mkdir ~/.vim/bundle/ShowMarks/doc
+    fi
+    
+    # make current user sudo passwordless
+    #if [ -z "$(sudo grep "${USER}" /etc/sudoers)" ]; then
+    #    echo "${USER} ALL = (ALL) NOPASSWD: ALL" | sudo tee -a /etc/sudoers
+    #fi
 
     # clone devstack
     git clone https://opendev.org/openstack/devstack ~/devstack
