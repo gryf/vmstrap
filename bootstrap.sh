@@ -2,6 +2,24 @@
 
 set -e
 
+if command -v lsb_release 2>&1 > /dev/null; then
+    DISTRO_ID=$(lsb_release -i | cut -f 2 -d ':' | tr '[:upper:]' '[:lower:]')
+    DISTRO_R=$(lsb_release -r | awk '{print $2}')
+else
+    if [[ -e /etc/redhat-release ]]; then
+        DISTRO_ID=$(cut -f 1 -d ' ' /etc/redhat-release | \
+            tr '[:upper:]' '[:lower:]')
+        if [[ $DISTRO_ID =~ centos ]]; then
+            # CentOS Linux release 7.6.1810 (Core)
+            # We want only major, here: 7
+            DISTRO_R=$(cut -f 4 -d ' ' /etc/redhat-release | cut -f 1 -d '.')
+        elif [[ $DISTRO_ID =~ fedora ]]; then 
+            # Fedora release 32 (Thirty Two)
+            DISTRO_R=$(cut -f 3 -d ' ' /etc/redhat-release)
+        fi
+    fi
+fi
+
 centos7() {
     # 1. update
     sudo yum -y install epel-release
@@ -267,17 +285,17 @@ ubuntu() {
     cp kuryr.conf ~/devstack/local.conf
 }
 
-if [[ $1 = "ubuntu" ]]; then
-    ubuntu
-    exit
-fi
-if [[ $1 = "centos" ]]; then
-    centos7
-    exit
-fi
-if [[ $1 = "fedora" ]]; then
-    fedora
-    exit
-fi
-
-usage $0 fedora|centos|ubuntu
+case $DISTRO_ID in
+    "ubuntu")
+        ubuntu
+        ;;
+    "centos")
+        centos7
+        ;;
+    "fedora")
+        fedora
+        ;;
+    *)
+        echo Distribution ${DISTRO_ID} not supported
+        ;;
+esac
