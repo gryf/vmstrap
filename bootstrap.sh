@@ -20,23 +20,25 @@ else
     fi
 fi
 
+COMMON_PGS=(ccze
+    git-review 
+    htop
+    jq
+    mc
+    tmux)
+
 centos7() {
     # 1. update
     sudo yum -y install epel-release
     sudo yum -y update
 
     # rxvt-unicode-256color to have proper terminfo
-    pgs="bash-completion
-         ccze
+    pgs=(bash-completion
          ctags
          gcc
          gcc-c++
-         git-review 
-         htop
-         jq 
          kernel-devel
          make
-         mc
          ptpython2
          python-devel
          python-devel 
@@ -55,11 +57,10 @@ centos7() {
          python36-mccabe
          rxvt-unicode-256color
          the_silver_searcher 
-         tmux
-         vim"
+         vim)
 
     # 2. install tools
-    sudo yum install -y $pgs
+    sudo yum install -y "${COMMON_PGS[@]}" "${PGS[@]}"
 
     # 3. cleanup
     sudo yum -y clean all
@@ -137,14 +138,31 @@ fedora() {
     sudo yum -y update
 
     # rxvt-unicode-256color to have proper terminfo
-    PGS="bash-completion vim mc htop ctags git-review the_silver_searcher 
-         rxvt-unicode-256color tmux jq gcc gcc-c++ kernel-devel make 
-         python3-ipython ptpython3 python3-jedi python3-flake8 python3-mccabe 
-         python3-pylint python3-apsw python2-pip python3-pip python3-devel 
-         python2-devel python2"
+
+    PGS=(bash-completion
+        ctags
+        gcc
+        gcc-c++
+        kernel-devel
+        make
+        ptpython3
+        python2
+        python2-devel
+        python2-pip
+        python3-apsw
+        python3-devel
+        python3-flake8
+        python3-ipython
+        python3-jedi
+        python3-mccabe
+        python3-pip
+        python3-pylint
+        rxvt-unicode-256color
+        the_silver_searcher
+        vim)
 
     # 2. install tools
-    sudo yum install -y $PGS
+    sudo yum install -y "${COMMON_PGS[@]}" "${PGS[@]}"
 
     # 3. cleanup
     sudo yum -y clean all
@@ -209,13 +227,9 @@ ubuntu() {
     sudo apt update && sudo apt -y upgrade
 
     if lsb_release -cs 2>/dev/null | grep -q bionic; then
-        PGS=(ccze
-            exuberant-ctags
+        PGS=(exuberant-ctags
             flake8
-            git-review
-            htop
             ipython3
-            mc
             python-apsw
             python-flake8
             python-jedi
@@ -226,13 +240,9 @@ ubuntu() {
             tmate
             vim-gtk)
     else
-        PGS=(ccze
-            exuberant-ctags
+        PGS=(exuberant-ctags
             flake8
-            git-review
-            htop
             ipython
-            mc
             python-apsw
             python-flake8
             python-jedi
@@ -244,7 +254,7 @@ ubuntu() {
     fi
 
     # 2. install tools
-    sudo apt install -y "${PGS[@]}"
+    sudo apt install -y "${COMMON_PGS[@]}" "${PGS[@]}"
 
     # 3. cleanup
     sudo apt-get autoremove -y && sudo apt-get autoclean -y
