@@ -44,7 +44,6 @@ COMMON_RPM=(bash-completion
     make
     python3-devel
     python3-pip
-    rxvt-unicode-256color
     the_silver_searcher
     vim)
 
@@ -62,15 +61,13 @@ COMMON_DEB=(exuberant-ctags
 rpm_based() {
     if [[ $DISTRO_ID == 'fedora' ]]; then
         PGS=(ptpython3
-            python2
-            python2-devel
-            python2-pip
             python3-apsw
             python3-flake8
             python3-ipython
             python3-jedi
             python3-mccabe
-            python3-pylint)
+            python3-pylint
+            rxvt-unicode)
     elif [[ $DISTRO_ID == 'centos' ]]; then
         PGS=(ptpython2
              python-devel
@@ -83,7 +80,8 @@ rpm_based() {
              python2-pip
              python34-apsw
              python36-jedi
-             python36-mccabe)
+             python36-mccabe
+             rxvt-unicode-256color)
     fi
 
     # 1. update
@@ -118,7 +116,7 @@ rpm_based() {
             sudo pip install ${pkgs_to_install}
         fi
     elif [[ $DISTRO_ID == 'centos' ]]; then
-        sudo pip3 install -u pip setuptools
+        sudo pip3 install -U pip setuptools
         installed_pkgs=$(pip list)
         if echo "${installed_pkgs}" | grep -qv "rainbow"; then
             sudo pip install rainbow
