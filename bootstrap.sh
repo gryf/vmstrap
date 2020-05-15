@@ -1,5 +1,13 @@
 #!/bin/bash
 
+# Sometimes, it might be needed to force external network to cooperate:
+# Network on Ubuntu server:
+# paste it to the machine before running this script
+#  sudo sh -c 'rm /etc/resolv.conf; echo "nameserver 1.1.1.1" > /etc/resolv.conf'
+#  sudo sed -i -e "s/127.0.0.1 localhost/127.0.0.1 localhost ${HOSTNAME}/" /etc/hosts
+#  sudo sh -c 'echo "network: {config: disabled}" > /etc/cloud/cloud.cfg.d/99-disable-network-config.cfg'
+#  sudo netplan apply
+
 set -e
 
 if command -v lsb_release 2>&1 > /dev/null; then
@@ -78,25 +86,7 @@ centos7() {
     echo 'export visual="vim"' | sudo tee /etc/profile.d/vim.sh
     echo 'export editor="vim"' | sudo tee -a /etc/profile.d/vim.sh
 
-    # 5. install non-medieval version of vim (not working anymore)
-    # wget ftp://ftp.pbone.net/mirror/ftp5.gwdg.de/pub/opensuse/repositories/home:/fusion809/centos_7/x86_64/vim-common-8.1.0875-1.1.x86_64.rpm
-    # wget ftp://ftp.pbone.net/mirror/ftp5.gwdg.de/pub/opensuse/repositories/home:/fusion809/centos_7/x86_64/vim-enhanced-8.1.0875-1.1.x86_64.rpm
-    # wget ftp://ftp.pbone.net/mirror/ftp5.gwdg.de/pub/opensuse/repositories/home:/fusion809/centos_7/x86_64/vim-icons-8.1.0875-1.1.x86_64.rpm
-    # wget ftp://ftp.pbone.net/mirror/ftp5.gwdg.de/pub/opensuse/repositories/home:/fusion809/centos_7/x86_64/vim-minimal-8.1.0875-1.1.x86_64.rpm
-
-    # # this has to be run all at once, otherwise we will not have sudo for a
-    # # moment.
-    # sudo bash -c "yum -y remove vim-minimal vim-common vim-enhanced;
-        # rpm -i vim-common-8.1.0875-1.1.x86_64.rpm \
-        # vim-enhanced-8.1.0875-1.1.x86_64.rpm \
-        # vim-icons-8.1.0875-1.1.x86_64.rpm \
-        # vim-minimal-8.1.0875-1.1.x86_64.rpm;
-        # yum -y install sudo"
-
-    # rm vim-common-8.1.0875-1.1.x86_64.rpm vim-enhanced-8.1.0875-1.1.x86_64.rpm \
-        # vim-icons-8.1.0875-1.1.x86_64.rpm vim-minimal-8.1.0875-1.1.x86_64.rpm
-
-    # 6. install tools from pypi (only py3, no more latest setuptools for py2)
+    # 5. install tools from pypi (only py3, no more latest setuptools for py2)
     sudo pip3 install -u pip setuptools
     installed_pkgs=$(pip list)
     if echo "${installed_pkgs}" | grep -qv "rainbow"; then
@@ -111,7 +101,7 @@ centos7() {
         fi
     done
 
-    # 7. copy configuration for bash, git, tmux
+    # 6. copy configuration for bash, git, tmux
     common_conf
 }
 
@@ -163,15 +153,6 @@ fedora() {
 }
 
 ubuntu() {
-    # Sometimes, it might be needed to force external network to cooperate:
-    # 0. network. paste it to the machine before running this script
-    # sudo sh -c 'rm /etc/resolv.conf; echo "nameserver 1.1.1.1" > /etc/resolv.conf'
-    # sudo sed -i -e "s/127.0.0.1 localhost/127.0.0.1 localhost ${HOSTNAME}/" /etc/hosts
-    # sudo sh -c 'echo "network: {config: disabled}" > /etc/cloud/cloud.cfg.d/99-disable-network-config.cfg'
-    # sudo netplan apply
-    # git clone https://github.com/gryf/vmstrap
-    # cd vmstrap
-
     case $DISTRO_R in
         '16.04')
             PGS=(ipython
@@ -201,7 +182,7 @@ ubuntu() {
     sudo apt-get autoremove -y && sudo apt-get autoclean -y
 
     # 4. set default editor
-    sudo update-alternatives --set editor /usr/bin/vim.gtk-py2
+    sudo update-alternatives --set editor /usr/bin/vim.basic
 
     # 5. install tools from pypi
     sudo pip install pip --upgrade
