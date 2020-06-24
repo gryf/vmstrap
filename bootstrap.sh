@@ -170,6 +170,8 @@ ubuntu() {
     # 5. install tools from pypi
     sudo pip install pip --upgrade
     sudo pip install remote_pdb rainbow pdbpp
+    sudo pip3 install pip --upgrade
+    sudo pip3 install remote_pdb rainbow pdbpp
 
     # 6. copy configuration for bash, git, tmux
     common_conf
