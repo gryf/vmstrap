@@ -55,6 +55,7 @@ COMMON_DEB=(exuberant-ctags
     python-pip
     python3-flake8
     python3-jedi
+    rlwrap
     silversearcher-ag)
 
 
