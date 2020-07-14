@@ -168,8 +168,6 @@ ubuntu() {
 
     # 4. change alternatives
     sudo update-alternatives --set editor /usr/bin/vim.basic
-    sudo update-alternatives --remove-all python
-    sudo update-alternatives --set editor /usr/bin/vim.basic
     sudo update-alternatives \
         --install /usr/bin/python python /usr/bin/python3.6 10
     sudo update-alternatives --install /usr/bin/pip pip /usr/bin/pip3 10
