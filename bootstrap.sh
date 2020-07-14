@@ -144,6 +144,7 @@ ubuntu() {
             ;;
         '18.04')
             PGS=(ipython3
+                python3-pip
                 tmate
                 vim-gtk)
             ;;
@@ -165,8 +166,13 @@ ubuntu() {
     # 3. cleanup
     sudo apt-get autoremove -y && sudo apt-get autoclean -y
 
-    # 4. set default editor
+    # 4. change alternatives
     sudo update-alternatives --set editor /usr/bin/vim.basic
+    sudo update-alternatives --remove-all python
+    sudo update-alternatives --set editor /usr/bin/vim.basic
+    sudo update-alternatives \
+        --install /usr/bin/python python /usr/bin/python3.6 10
+    sudo update-alternatives --install /usr/bin/pip pip /usr/bin/pip3 10
 
     # 5. install tools from pypi
     sudo pip install pip --upgrade
