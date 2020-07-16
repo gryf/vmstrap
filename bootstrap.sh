@@ -201,7 +201,7 @@ common_conf() {
     cp cleanup.sh ~/
     {
         echo 'source ~/.bash_prompt'
-        echo "alias ip='ip -c'"
+        echo "alias ipc='ip -c'"
         echo "alias skctl='kubectl -n kube-system'"
         echo "alias pods='kubectl get pods -A -o wide'"
         echo "alias deploys='kubectl get deployments -A -o wide'"
