@@ -173,6 +173,9 @@ ubuntu() {
             sudo update-alternatives \
                 --install /usr/bin/python python /usr/bin/python3.6 10
             sudo update-alternatives --install /usr/bin/pip pip /usr/bin/pip3 10
+            # 5.
+            sudo pip3 install pip --upgrade
+            sudo pip3 install remote_pdb rainbow pdbpp
             ;;
         '20.04')
             echo "20.04 is not yet supported"
@@ -183,8 +186,6 @@ ubuntu() {
     # 5. install tools from pypi
     sudo pip install pip --upgrade
     sudo pip install remote_pdb rainbow pdbpp
-    sudo pip3 install pip --upgrade
-    sudo pip3 install remote_pdb rainbow pdbpp
 
     # 6. copy configuration for bash, git, tmux
     common_conf
