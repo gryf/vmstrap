@@ -168,9 +168,17 @@ ubuntu() {
 
     # 4. change alternatives
     sudo update-alternatives --set editor /usr/bin/vim.basic
-    sudo update-alternatives \
-        --install /usr/bin/python python /usr/bin/python3.6 10
-    sudo update-alternatives --install /usr/bin/pip pip /usr/bin/pip3 10
+    case $DISTRO_R in
+        '18.04')
+            sudo update-alternatives \
+                --install /usr/bin/python python /usr/bin/python3.6 10
+            sudo update-alternatives --install /usr/bin/pip pip /usr/bin/pip3 10
+            ;;
+        '20.04')
+            echo "20.04 is not yet supported"
+            exit 1
+            ;;
+    esac
 
     # 5. install tools from pypi
     sudo pip install pip --upgrade
