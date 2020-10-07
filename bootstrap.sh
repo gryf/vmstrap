@@ -215,6 +215,7 @@ common_conf() {
         echo "alias pods='kubectl get pods -A -o wide'"
         echo "alias deploys='kubectl get deployments -A -o wide'"
         echo "source ~/devstack/openrc admin admin >/dev/null 2>/dev/null"
+        echo "source <(kubectl completion bash)"
     } >> ~/.bashrc
 
     if [ ! -d ~/.vim ]; then
