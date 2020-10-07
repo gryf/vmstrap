@@ -1,4 +1,4 @@
-#!/usr/bin/env bash                                                                                                                                                                                         
+#!/usr/bin/env bash
 
 function wait_for {
     local command=$1
@@ -21,7 +21,7 @@ kubectl run --image kuryr/demo -n foo client
 wait_for "kubectl get pod -A |grep client|grep -q Running" 1
 kubectl exec -ti -n foo client -- wget http://server.foo -q -O -
 cat > policy_foo_deny_all.yaml << NIL
-apiVersion: networking.k8s.io/v1                                                                                                                                                                            
+apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
   name: deny-all
