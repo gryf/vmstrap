@@ -234,6 +234,12 @@ common_conf() {
     # clone devstack
     git clone https://opendev.org/openstack/devstack ~/devstack
     cp kuryr.conf ~/devstack/local.conf
+
+    # get k9s
+    wget https://github.com/derailed/k9s/releases/download/v0.23.10/k9s_Linux_x86_64.tar.gz
+    tar xf k9s_Linux_x86_64.tar.gz k9s
+    rm k9s_Linux_x86_64.tar.gz
+    mv k9s ~/
 }
 
 case $DISTRO_ID in
