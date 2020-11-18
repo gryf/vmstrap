@@ -33,6 +33,9 @@ LIGHT_GREEN="\[\033[1;32m\]"
  LIGHT_GRAY="\[\033[0;37m\]"
  COLOR_NONE="\[\e[0m\]"
 
+# THRESHOLD is expressed in seconds.
+THRESHOLD=3
+
 GIT_PICT="◆"
 HG_PICT="☿"
 PY_PICT="℗"
@@ -168,6 +171,50 @@ function set_nodevirtenv () {
   fi
 }
 
+# Shamlesely stolen from: https://stackoverflow.com/a/31694983 and improve it
+# with minimal time which is acceptable for executing command.
+function timer_now {
+    date +%s%N
+}
+
+function timer_start {
+    timer_start=${timer_start:-$(timer_now)}
+}
+
+function timer_stop {
+    local delta_us=$((($(timer_now) - $timer_start) / 1000))
+    local us=$((delta_us % 1000))
+    local ms=$(((delta_us / 1000) % 1000))
+    local s=$(((delta_us / 1000000) % 60))
+    local m=$(((delta_us / 60000000) % 60))
+    local h=$((delta_us / 3600000000))
+
+    timer_show=""
+
+    if [[ $s -lt $THRESHOLD ]]; then
+        unset timer_start
+        return
+    fi
+
+    # Always show around 3 digits of accuracy
+    if ((h > 0)); then
+        timer_show=${h}h${m}m
+    elif ((m > 0)); then
+        timer_show=${m}m${s}s
+    elif ((s >= 10)); then
+        timer_show=${s}.$((ms / 100))s
+    elif ((s > 0)); then
+        timer_show=${s}.$(printf %03d $ms)s
+    elif ((ms >= 100)); then
+        timer_show=${ms}ms
+    elif ((ms > 0)); then
+        timer_show=${ms}.$((us / 100))ms
+    else
+        timer_show=${us}us
+    fi
+    unset timer_start
+}
+
 # Set the full bash prompt.
 function set_bash_prompt () {
   # Set the PROMPT_SYMBOL variable. We do this first so we don't lose the
@@ -185,15 +232,25 @@ function set_bash_prompt () {
     set_git_branch
   elif is_subversion_repository ; then
     set_subversion_branch
-  elif is_mercurial_repository ; then 
+  elif is_mercurial_repository ; then
     set_mercurial_branch
   else
     BRANCH=''
   fi
 
+    timer_stop
+    TIME=""
+    if [[ -n "${timer_show}" ]]; then
+        TIME="${LIGHT_GRAY}${timer_show}${COLOR_NONE} "
+    fi
+
   # Set the bash prompt variable.
-  PS1="${CYAN}\u@\h ${PYTHON_VIRTUALENV}${NODE_VIRTUALENV}${GREEN}${BLUE}\w${COLOR_NONE} ${BRANCH}${PROMPT_SYMBOL} "
+  PS1="${CYAN}\u@\h ${PYTHON_VIRTUALENV}${NODE_VIRTUALENV}"
+  PS1="${PS1}${BLUE}\w${COLOR_NONE} ${BRANCH}${TIME}${PROMPT_SYMBOL} "
 }
+
+# start measuring time of execution
+trap 'timer_start' DEBUG
 
 # Tell bash to execute this function just before displaying its prompt.
 PROMPT_COMMAND=set_bash_prompt
