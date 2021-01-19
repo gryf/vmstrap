@@ -10,7 +10,7 @@
 
 set -e
 
-if command -v lsb_release 2>&1 > /dev/null; then
+if command -v lsb_release > /dev/null 2>&1; then
     DISTRO_ID=$(lsb_release -i | cut -f 2 -d ':' | xargs \
         | tr '[:upper:]' '[:lower:]')
     DISTRO_R=$(lsb_release -r | awk '{print $2}')
@@ -71,18 +71,18 @@ rpm_based() {
             rxvt-unicode)
     elif [[ $DISTRO_ID == 'centos' ]]; then
         PGS=(ptpython2
-             python-devel
-             python-flake8
-             python-ipython-console
-             python-pip
-             python2-apsw
-             python2-jedi
-             python2-mccabe
-             python2-pip
-             python34-apsw
-             python36-jedi
-             python36-mccabe
-             rxvt-unicode-256color)
+            python-devel
+            python-flake8
+            python-ipython-console
+            python-pip
+            python2-apsw
+            python2-jedi
+            python2-mccabe
+            python2-pip
+            python34-apsw
+            python36-jedi
+            python36-mccabe
+            rxvt-unicode-256color)
     fi
 
     # 1. update
@@ -172,7 +172,8 @@ ubuntu() {
         '18.04')
             sudo update-alternatives \
                 --install /usr/bin/python python /usr/bin/python3.6 10
-            sudo update-alternatives --install /usr/bin/pip pip /usr/bin/pip3 10
+            sudo update-alternatives \
+                --install /usr/bin/pip pip /usr/bin/pip3 10
             # 5.
             sudo pip3 install pip --upgrade
             sudo pip3 install remote_pdb rainbow pdbpp
@@ -236,7 +237,8 @@ common_conf() {
     cp kuryr.conf ~/devstack/local.conf
 
     # get k9s
-    wget https://github.com/derailed/k9s/releases/download/v0.23.10/k9s_Linux_x86_64.tar.gz
+    wget "https://github.com/derailed/k9s/releases/download/"`
+        `"v0.23.10/k9s_Linux_x86_64.tar.gz"
     tar xf k9s_Linux_x86_64.tar.gz k9s
     rm k9s_Linux_x86_64.tar.gz
     mv k9s ~/
