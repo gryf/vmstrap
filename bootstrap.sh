@@ -50,9 +50,6 @@ COMMON_RPM=(bash-completion
 COMMON_DEB=(exuberant-ctags
     flake8
     python-apsw
-    python-flake8
-    python-jedi
-    python-pip
     python3-flake8
     python3-jedi
     rlwrap
@@ -140,10 +137,16 @@ ubuntu() {
     case $DISTRO_R in
         '16.04')
             PGS=(ipython
+                python-flake8
+                python-jedi
+                python-pip
                 vim-gtk-py2)
             ;;
         '18.04')
             PGS=(ipython3
+                python-flake8
+                python-jedi
+                python-pip
                 python3-pip
                 tmate
                 vim-gtk)
