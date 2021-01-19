@@ -185,7 +185,7 @@ ubuntu() {
             ;;
         '20.04')
             sudo update-alternatives \
-                --install /usr/bin/python python /usr/bin/python3.6 10
+                --install /usr/bin/python python /usr/bin/python3.8 10
             sudo update-alternatives \
                 --install /usr/bin/pip pip /usr/bin/pip3 10
             # 5.
