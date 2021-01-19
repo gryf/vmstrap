@@ -149,8 +149,10 @@ ubuntu() {
                 vim-gtk)
             ;;
         '20.04')
-            echo "20.04 is not yet supported"
-            exit 1
+            PGS=(ipython3
+                python3-pip
+                tmate
+                vim-gtk)
             ;;
         *)
             echo "Unsupported Ubuntu version: ${DISTRO_R}"
@@ -179,8 +181,13 @@ ubuntu() {
             sudo pip3 install remote_pdb rainbow pdbpp
             ;;
         '20.04')
-            echo "20.04 is not yet supported"
-            exit 1
+            sudo update-alternatives \
+                --install /usr/bin/python python /usr/bin/python3.6 10
+            sudo update-alternatives \
+                --install /usr/bin/pip pip /usr/bin/pip3 10
+            # 5.
+            sudo pip3 install pip --upgrade
+            sudo pip3 install remote_pdb rainbow pdbpp
             ;;
     esac
 
