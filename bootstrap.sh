@@ -203,21 +203,67 @@ ubuntu() {
     common_conf
 }
 
-common_conf() {
-    cp .bash_prompt ~/
-    cp .tmux.conf ~/
-    # v and y like vi in copy-mode
-    if [[ $DISTRO_ID == 'centos' ]]; then
+tmux_conf() {
+    tmux_ver=$(tmux -V|cut -f 2 -d ' ')
+    major=${tmux_ver%.*}
+    minor=${tmux_ver#*.}
+
+    # some colors
+    if [[ $major -lt 3 ]]; then
         {
+            # tmux < 3.x
+            echo "setw -g window-status-current-bg colour8"
+            echo "setw -g window-status-current-fg colour15"
+            echo "setw -g window-status-current-attr bold"
+            echo "set -g pane-active-border-bg default"
+            echo "set -g pane-active-border-fg brightyellow"
+            echo "set -g pane-border-fg green"
+            echo "set -g message-fg white"
+            echo "set -g message-bg black"
+        } >> ~/.tmux.conf
+    else
+        {
+            echo 'setw -g window-status-current-style "bg=colour8'`
+                `'fg=colour15 bold"'
+            echo "set -g pane-border-style fg=green"
+            echo 'set -g pane-active-border-style "bg=default fg=brightyellow"'
+            echo 'set -g message-style "fg=white bg=black"'
+        } >> ~/.tmux.conf
+    fi
+
+    if [[ ! ( $major == 1 && $minor -le 6 ) ]]; then
+        {
+            echo ""
+            echo "# renumber windows when a window is closed"
+            echo "set -g renumber-windows on"
+        } >> ~/.tmux.conf
+    fi
+
+    # vi-like selection
+    if [[ $major -eq 1 || $major -eq 2 && $minor -lt 6 ]]; then
+        {
+            # tmux ~ 1.6/1.7/1.8/<2.6
+            echo
+            echo "# v and y like vi in copy-mode"
             echo "bind -t vi-copy 'v' begin-selection"
             echo "bind -t vi-copy 'y' copy-selection"
         } >> ~/.tmux.conf
     else
         {
+            # tmux >= 2.6
+            echo
+            echo "# v and y like vi in copy-mode"
             echo "bind-key -T copy-mode-vi 'v' send -X begin-selection"
             echo "bind-key -T copy-mode-vi 'y' send -X copy-selection"
         } >> ~/.tmux.conf
     fi
+}
+
+common_conf() {
+    cp .bash_prompt ~/
+    cp .tmux.conf ~/
+    tmux_conf
+
     cp .gitconfig ~/
     cp cleanup.sh ~/
     {
