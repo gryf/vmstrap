@@ -173,7 +173,13 @@ ubuntu() {
 
     # 4. change alternatives
     sudo update-alternatives --set editor /usr/bin/vim.basic
+
+    # 5.
     case $DISTRO_R in
+        '16.04')
+            sudo pip install pip --upgrade
+            sudo pip install remote_pdb rainbow pdbpp
+            ;;
         '18.04')
             sudo update-alternatives \
                 --install /usr/bin/python python /usr/bin/python3.6 10
@@ -189,14 +195,9 @@ ubuntu() {
             sudo update-alternatives \
                 --install /usr/bin/pip pip /usr/bin/pip3 10
             # 5.
-            sudo pip3 install pip --upgrade
             sudo pip3 install remote_pdb rainbow pdbpp
             ;;
     esac
-
-    # 5. install tools from pypi
-    sudo pip install pip --upgrade
-    sudo pip install remote_pdb rainbow pdbpp
 
     # 6. copy configuration for bash, git, tmux
     common_conf
