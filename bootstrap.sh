@@ -45,7 +45,8 @@ COMMON_RPM=(bash-completion
     python3-devel
     python3-pip
     the_silver_searcher
-    vim)
+    vim
+    wget)
 
 COMMON_DEB=(exuberant-ctags
     flake8
