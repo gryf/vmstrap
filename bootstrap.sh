@@ -224,7 +224,7 @@ tmux_conf() {
         } >> ~/.tmux.conf
     else
         {
-            echo 'setw -g window-status-current-style "bg=colour8'`
+            echo 'setw -g window-status-current-style "bg=colour8 '`
                 `'fg=colour15 bold"'
             echo "set -g pane-border-style fg=green"
             echo 'set -g pane-active-border-style "bg=default fg=brightyellow"'
