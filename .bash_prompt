@@ -37,23 +37,10 @@ LIGHT_GREEN="\[\033[1;32m\]"
 THRESHOLD=3
 
 # various symbols, depending on used font in urxvt
-echo $TERM | grep -qi rxvt
-if [[ $? == 0 ]]; then
-    grep  -i 'urxvt.font:' ~/.Xdefaults | grep -qi misc-fixed
-    if [[ $? == 0 ]]; then
-        GIT_PICT="◆"
-        HG_PICT="☿"
-        PY_PICT="℗"
-        JS_PICT="ⓙ"
-    fi
-fi
-
-if [[ -z $GIT_PICT ]]; then
-    GIT_PICT=""
-    HG_PICT=""
-    PY_PICT=""
-    JS_PICT=""
-fi
+GIT_PICT=""
+HG_PICT=""
+PY_PICT=""
+JS_PICT=""
 
 
 # Detect whether the current directory is a git repository.
