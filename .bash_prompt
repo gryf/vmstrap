@@ -37,8 +37,8 @@ LIGHT_GREEN="\[\033[1;32m\]"
 THRESHOLD=3
 
 # various symbols, depending on used font in urxvt
-GIT_PICT=""
-HG_PICT=""
+GIT_PICT=""
+HG_PICT=""
 PY_PICT=""
 JS_PICT=""
 
