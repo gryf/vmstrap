@@ -163,6 +163,12 @@ ubuntu() {
             ;;
     esac
 
+    # 0. hold - those doesn't matter, since we never get to the point when 
+    # reboot is needed.
+    sudo apt-mark hold linux-headers-generic linux-headers-virtual \
+        linux-image-virtual linux-virtual cryptsetup-initramfs \
+        busybox-initramfs cloud-init initramfs-tools
+
     # 1. update
     sudo apt update && sudo apt -y upgrade
 
