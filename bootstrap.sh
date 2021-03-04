@@ -156,7 +156,7 @@ ubuntu() {
             PGS=(ipython3
                 python3-pip
                 tmate
-                vim-gtk)
+                vim-nox)
             ;;
         *)
             echo "Unsupported Ubuntu version: ${DISTRO_R}"
