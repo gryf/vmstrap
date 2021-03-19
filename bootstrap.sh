@@ -276,7 +276,7 @@ common_conf() {
     {
         echo 'source ~/.bash_prompt'
         echo "alias ipc='ip -c'"
-        echo "alias skctl='kubectl -n kube-system'"
+        echo "alias kss='kubectl -n kube-system'"
         echo "alias pods='kubectl get pods -A -o wide'"
         echo "alias deploys='kubectl get deployments -A -o wide'"
         echo "source ~/devstack/openrc admin admin >/dev/null 2>/dev/null"
