@@ -163,11 +163,11 @@ ubuntu() {
             ;;
     esac
 
-    # 0. hold - those doesn't matter, since we never get to the point when 
-    # reboot is needed.
-    sudo apt-mark hold linux-headers-generic linux-headers-virtual \
-        linux-image-virtual linux-virtual cryptsetup-initramfs \
-        busybox-initramfs cloud-init initramfs-tools
+    ## 0. hold - those doesn't matter, since we never get to the point when 
+    ## reboot is needed.
+    #sudo apt-mark hold linux-headers-generic linux-headers-virtual \
+    #    linux-image-virtual linux-virtual cryptsetup-initramfs \
+    #    busybox-initramfs cloud-init initramfs-tools
 
     # 1. update
     sudo apt update && sudo apt -y upgrade
@@ -279,8 +279,9 @@ common_conf() {
         echo "alias kss='kubectl -n kube-system'"
         echo "alias pods='kubectl get pods -A -o wide'"
         echo "alias deploys='kubectl get deployments -A -o wide'"
-        echo "source ~/devstack/openrc admin admin >/dev/null 2>/dev/null"
-        echo "source <(kubectl completion bash)"
+        echo "# uncomment after successful deployment"
+        echo "#source ~/devstack/openrc admin admin >/dev/null 2>/dev/null"
+        echo "#source <(kubectl completion bash)"
     } >> ~/.bashrc
 
     if [ ! -d ~/.vim ]; then
