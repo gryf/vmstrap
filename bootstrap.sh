@@ -273,6 +273,17 @@ common_conf() {
 
     cp .gitconfig ~/
     cp cleanup.sh ~/
+
+    for i in $(seq 0 3); do
+        ifname=$(ip -j a|jq .[$i].ifname)
+        if [[ "${ifname}" = "lo" ]]; then
+            continue
+        fi
+        ipaddr=$(ip -j a|jq \
+            '.[$i].addr_info[] | select(.family == "inet") | .local')
+        break;
+    done
+
     {
         echo 'source ~/.bash_prompt'
         echo "alias ipc='ip -c'"
@@ -282,6 +293,7 @@ common_conf() {
         echo "# uncomment after successful deployment"
         echo "#source ~/devstack/openrc admin admin >/dev/null 2>/dev/null"
         echo "#source <(kubectl completion bash)"
+        echo "export HOST_IP=${ipaddr}"
     } >> ~/.bashrc
 
     if [ ! -d ~/.vim ]; then
