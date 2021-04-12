@@ -275,11 +275,11 @@ common_conf() {
     cp cleanup.sh ~/
 
     for i in $(seq 0 3); do
-        ifname=$(ip -j a|jq .[$i].ifname)
+        ifname=$(ip -j a|jq -r .[$i].ifname)
         if [[ "${ifname}" = "lo" ]]; then
             continue
         fi
-        ipaddr=$(ip -j a|jq \
+        ipaddr=$(ip -j a|jq -r \
             ".[$i].addr_info[] | select(.family == \"inet\") | .local")
         break;
     done
@@ -300,6 +300,7 @@ common_conf() {
         git clone https://github.com/gryf/.vim ~/.vim
         # populate plugins
         vim -c ':PlugUpdate' -c ':qa!'
+        vim -c ':qa!'
         # showmarks is a stubborn one
         mkdir ~/.vim/bundle/ShowMarks/doc
     fi
