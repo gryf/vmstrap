@@ -10,6 +10,9 @@
 
 set -e
 
+DIR=$(dirname $BASH_SOURCE[0])
+
+
 if command -v lsb_release > /dev/null 2>&1; then
     DISTRO_ID=$(lsb_release -i | cut -f 2 -d ':' | xargs \
         | tr '[:upper:]' '[:lower:]')
@@ -267,12 +270,12 @@ tmux_conf() {
 }
 
 common_conf() {
-    cp .bash_prompt ~/
-    cp .tmux.conf ~/
+    cp "${DIR}/.bash_prompt" ~/
+    cp "${DIR}/.tmux.conf" ~/
     tmux_conf
 
-    cp .gitconfig ~/
-    cp cleanup.sh ~/
+    cp "${DIR}/.gitconfig" ~/
+    cp "${DIR}/cleanup.sh" ~/
 
     for i in $(seq 0 3); do
         ifname=$(ip -j a|jq -r .[$i].ifname)
@@ -300,9 +303,9 @@ common_conf() {
         git clone https://github.com/gryf/.vim ~/.vim
         # populate plugins
         vim -c ':PlugUpdate' -c ':qa!'
-        vim -c ':qa!'
         # showmarks is a stubborn one
         mkdir ~/.vim/bundle/ShowMarks/doc
+        vim -c ':qa!'
     fi
 
     # make current user sudo passwordless
@@ -312,7 +315,7 @@ common_conf() {
 
     # clone devstack
     git clone https://opendev.org/openstack/devstack ~/devstack
-    cp kuryr.conf ~/devstack/local.conf
+    cp "${DIR}/kuryr.conf" ~/devstack/local.conf
 
     # get k9s
     wget "https://github.com/derailed/k9s/releases/download/"`
