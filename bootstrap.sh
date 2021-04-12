@@ -280,7 +280,7 @@ common_conf() {
             continue
         fi
         ipaddr=$(ip -j a|jq \
-            '.[$i].addr_info[] | select(.family == "inet") | .local')
+            ".[$i].addr_info[] | select(.family == \"inet\") | .local")
         break;
     done
 
