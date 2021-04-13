@@ -319,10 +319,9 @@ common_conf() {
 
     # get k9s
     wget "https://github.com/derailed/k9s/releases/download/"`
-        `"v0.23.10/k9s_Linux_x86_64.tar.gz"
-    tar xf k9s_Linux_x86_64.tar.gz k9s
+        `"v0.24.7/k9s_Linux_x86_64.tar.gz"
+    tar xf k9s_Linux_x86_64.tar.gz --directory ~/ k9s
     rm k9s_Linux_x86_64.tar.gz
-    mv k9s ~/
 }
 
 case $DISTRO_ID in
