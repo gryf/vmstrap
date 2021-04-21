@@ -293,9 +293,12 @@ common_conf() {
         echo "alias kss='kubectl -n kube-system'"
         echo "alias pods='kubectl get pods -A -o wide'"
         echo "alias deploys='kubectl get deployments -A -o wide'"
-        echo "# uncomment after successful deployment"
-        echo "#source ~/devstack/openrc admin admin >/dev/null 2>/dev/null"
-        echo "#source <(kubectl completion bash)"
+        echo "if which openstack 2>/dev/null >/dev/null; then"
+        echo "    source ~/devstack/openrc admin admin >/dev/null 2>/dev/null"
+        echo "fi"
+        echo "if which kubectl 2>/dev/null >/dev/null; then"
+        echo "    source <(kubectl completion bash)"
+        echo "fi"
         echo "export HOST_IP=${ipaddr}"
     } >> ~/.bashrc
 
