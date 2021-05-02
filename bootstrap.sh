@@ -303,18 +303,12 @@ common_conf() {
     } >> ~/.bashrc
 
     if [ ! -d ~/.vim ]; then
-        git clone https://github.com/gryf/.vim ~/.vim
-        # populate plugins
-        vim -c ':PlugUpdate' -c ':qa!'
-        # showmarks is a stubborn one
-        mkdir ~/.vim/bundle/ShowMarks/doc
-        vim -c ':qa!'
+        pushd $HOME
+        wget "https://github.com/gryf/.vim/releases/download/0.0.1/vim.tar.xz"
+        tar xf vim.tar.xf
+        rm vim.tar.xf
+        popd
     fi
-
-    # make current user sudo passwordless
-    #if [ -z "$(sudo grep "${USER}" /etc/sudoers)" ]; then
-    #    echo "${USER} ALL = (ALL) NOPASSWD: ALL" | sudo tee -a /etc/sudoers
-    #fi
 
     # clone devstack
     git clone https://opendev.org/openstack/devstack ~/devstack
