@@ -303,11 +303,10 @@ common_conf() {
     } >> ~/.bashrc
 
     if [ ! -d ~/.vim ]; then
-        pushd $HOME
         wget "https://github.com/gryf/.vim/releases/download/0.0.1/vim.tar.xz"
         tar xf vim.tar.xf
         rm vim.tar.xf
-        popd
+        mv .vim ~/
     fi
 
     # clone devstack
