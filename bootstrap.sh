@@ -277,16 +277,6 @@ common_conf() {
     cp "${DIR}/.gitconfig" ~/
     cp "${DIR}/cleanup.sh" ~/
 
-    for i in $(seq 0 3); do
-        ifname=$(ip -j a|jq -r .[$i].ifname)
-        if [[ "${ifname}" = "lo" ]]; then
-            continue
-        fi
-        ipaddr=$(ip -j a|jq -r \
-            ".[$i].addr_info[] | select(.family == \"inet\") | .local")
-        break;
-    done
-
     {
         echo 'source ~/.bash_prompt'
         echo "alias ipc='ip -c'"
@@ -299,7 +289,6 @@ common_conf() {
         echo "if which kubectl 2>/dev/null >/dev/null; then"
         echo "    source <(kubectl completion bash)"
         echo "fi"
-        echo "export HOST_IP=${ipaddr}"
     } >> ~/.bashrc
 
     if [ ! -d ~/.vim ]; then
