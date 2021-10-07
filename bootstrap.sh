@@ -60,7 +60,7 @@ COMMON_DEB=(exuberant-ctags
     silversearcher-ag)
 
 
-rpm_based() {
+function rpm_based {
     if [[ $DISTRO_ID == 'fedora' ]]; then
         PGS=(ptpython3
             python3-apsw
@@ -86,58 +86,60 @@ rpm_based() {
             rxvt-unicode-256color)
     fi
 
-    # 1. update
-    if [[ $DISTRO_ID == 'centos' ]]; then
-        # install epel repository for centos
-        sudo yum -y install epel-release
+    if [ "${DONT_INSTALL_PKGS}" != "1" ]; then
+        # 1. update
+        if [[ $DISTRO_ID == 'centos' ]]; then
+            # install epel repository for centos
+            sudo yum -y install epel-release
+        fi
+        sudo yum -y update
+
+        # 2. install tools
+        sudo yum install -y "${COMMON_PGS[@]}" "${COMMON_RPM[@]}" "${PGS[@]}"
+
+        # 3. cleanup
+        sudo yum -y clean all
+
+        # 4. install tools from pypi
+        if [[ $DISTRO_ID == 'fedora' ]]; then
+            sudo pip install -U pip setuptools
+            installed_pkgs=$(pip list)
+            pkgs_to_install=
+            for pkg in remote_pdb pdbpp rainbow; do
+                if echo "${installed_pkgs}" | grep -qv "${pkg}"; then
+                    pkgs_to_install="${pkgs_to_install} ${pkg}"
+                fi
+            done
+
+            if [ -n "${pkgs_to_install}" ]; then
+                sudo pip install ${pkgs_to_install}
+            fi
+        elif [[ $DISTRO_ID == 'centos' ]]; then
+            sudo pip3 install -U pip setuptools
+            installed_pkgs=$(pip list)
+            if echo "${installed_pkgs}" | grep -qv "rainbow"; then
+                sudo pip install rainbow
+                sudo pip3 install rainbow
+            fi
+
+            installed_pkgs=$(pip3 list)
+            for pkg in remote_pdb pdbpp; do
+                if echo "${installed_pkgs}" | grep -qv "${pkg}"; then
+                    sudo pip3 install ${pkg}
+                fi
+            done
+        fi
     fi
-    sudo yum -y update
 
-    # 2. install tools
-    sudo yum install -y "${COMMON_PGS[@]}" "${COMMON_RPM[@]}" "${PGS[@]}"
-
-    # 3. cleanup
-    sudo yum -y clean all
-
-    # 4. set default editor
+    # 5. set default editor
     echo 'export VISUAL="vim"' | sudo tee /etc/profile.d/vim.sh
     echo 'export EDITOR="vim"' | sudo tee -a /etc/profile.d/vim.sh
-
-    # 5. install tools from pypi
-    if [[ $DISTRO_ID == 'fedora' ]]; then
-        sudo pip install -U pip setuptools
-        installed_pkgs=$(pip list)
-        pkgs_to_install=
-        for pkg in remote_pdb pdbpp rainbow; do
-            if echo "${installed_pkgs}" | grep -qv "${pkg}"; then
-                pkgs_to_install="${pkgs_to_install} ${pkg}"
-            fi
-        done
-
-        if [ -n "${pkgs_to_install}" ]; then
-            sudo pip install ${pkgs_to_install}
-        fi
-    elif [[ $DISTRO_ID == 'centos' ]]; then
-        sudo pip3 install -U pip setuptools
-        installed_pkgs=$(pip list)
-        if echo "${installed_pkgs}" | grep -qv "rainbow"; then
-            sudo pip install rainbow
-            sudo pip3 install rainbow
-        fi
-
-        installed_pkgs=$(pip3 list)
-        for pkg in remote_pdb pdbpp; do
-            if echo "${installed_pkgs}" | grep -qv "${pkg}"; then
-                sudo pip3 install ${pkg}
-            fi
-        done
-    fi
 
     # 6. copy configuration for bash, git, tmux
     common_conf
 }
 
-ubuntu() {
+function ubuntu {
     case $DISTRO_R in
         '16.04')
             PGS=(ipython
@@ -172,49 +174,55 @@ ubuntu() {
     #    linux-image-virtual linux-virtual cryptsetup-initramfs \
     #    busybox-initramfs cloud-init initramfs-tools
 
-    # 1. update
-    sudo apt update && sudo apt -y upgrade
+    if [ "${DONT_INSTALL_PKGS}" != "1" ]; then
 
-    # 2. install tools
-    sudo apt install -y "${COMMON_PGS[@]}" "${COMMON_DEB[@]}" "${PGS[@]}"
+        # 1. update
+        sudo apt update && sudo apt -y upgrade
 
-    # 3. cleanup
-    sudo apt-get autoremove -y && sudo apt-get autoclean -y
+        # 2. install tools
+        sudo apt install -y "${COMMON_PGS[@]}" "${COMMON_DEB[@]}" "${PGS[@]}"
 
-    # 4. change alternatives
+        # 3. cleanup
+        sudo apt-get autoremove -y && sudo apt-get autoclean -y
+
+        # 4.
+        case $DISTRO_R in
+            '16.04')
+                sudo pip install pip --upgrade
+                sudo pip install remote_pdb rainbow pdbpp
+                ;;
+            '18.04')
+                sudo update-alternatives \
+                    --install /usr/bin/python python /usr/bin/python3.6 10
+                sudo update-alternatives \
+                    --install /usr/bin/pip pip /usr/bin/pip3 10
+                # 5.
+                sudo pip3 install pip --upgrade
+                sudo pip3 install remote_pdb rainbow pdbpp
+                ;;
+            '20.04')
+                sudo update-alternatives \
+                    --install /usr/bin/python python /usr/bin/python3.8 10
+                sudo update-alternatives \
+                    --install /usr/bin/pip pip /usr/bin/pip3 10
+                # 5.
+                sudo pip3 install remote_pdb rainbow pdbpp
+                ;;
+        esac
+    fi
+
+    # 5. change alternatives
     sudo update-alternatives --set editor /usr/bin/vim.basic
-
-    # 5.
-    case $DISTRO_R in
-        '16.04')
-            sudo pip install pip --upgrade
-            sudo pip install remote_pdb rainbow pdbpp
-            ;;
-        '18.04')
-            sudo update-alternatives \
-                --install /usr/bin/python python /usr/bin/python3.6 10
-            sudo update-alternatives \
-                --install /usr/bin/pip pip /usr/bin/pip3 10
-            # 5.
-            sudo pip3 install pip --upgrade
-            sudo pip3 install remote_pdb rainbow pdbpp
-            ;;
-        '20.04')
-            sudo update-alternatives \
-                --install /usr/bin/python python /usr/bin/python3.8 10
-            sudo update-alternatives \
-                --install /usr/bin/pip pip /usr/bin/pip3 10
-            # 5.
-            sudo pip3 install remote_pdb rainbow pdbpp
-            ;;
-    esac
 
     # 6. copy configuration for bash, git, tmux
     common_conf
 }
 
-tmux_conf() {
+function tmux_conf {
     tmux_ver=$(tmux -V|cut -f 2 -d ' ')
+    if [ -z "${tmux_ver}" ]; then
+        return
+    fi
     major=${tmux_ver%.*}
     minor=${tmux_ver#*.}
 
@@ -269,9 +277,10 @@ tmux_conf() {
     fi
 }
 
-common_conf() {
+function common_conf {
     cp "${DIR}/.bash_prompt" ~/
     cp "${DIR}/.tmux.conf" ~/
+
     tmux_conf
 
     cp "${DIR}/.gitconfig" ~/
@@ -299,10 +308,6 @@ common_conf() {
         popd
     fi
 
-    # clone devstack
-    git clone https://opendev.org/openstack/devstack ~/devstack
-    cp "${DIR}/kuryr.conf" ~/devstack/local.conf
-
     # get k9s
     wget "https://github.com/derailed/k9s/releases/download/"`
         `"v0.24.7/k9s_Linux_x86_64.tar.gz"
@@ -310,17 +315,49 @@ common_conf() {
     rm k9s_Linux_x86_64.tar.gz
 }
 
-case $DISTRO_ID in
-    "ubuntu")
-        ubuntu
-        ;;
-    "centos")
-        rpm_based
-        ;;
-    "fedora")  # Fedora 31
-        rpm_based
-        ;;
-    *)
-        echo "Distribution ${DISTRO_ID} not supported"
-        ;;
-esac
+function _showusage {
+    echo "Usage: $(basename $1) [OPTIONS]"
+    echo "Configure system and optionally install a set of packages."
+    echo
+    echo Where OPTIONS are:
+    echo "  -h        This help."
+    echo "  -c        Do the config only, don't install anything"
+}
+
+function main {
+    case $DISTRO_ID in
+        "ubuntu")
+            ubuntu
+            ;;
+        "centos")
+            rpm_based
+            ;;
+        "fedora")  # Fedora 31
+            rpm_based
+            ;;
+        *)
+            echo "Distribution ${DISTRO_ID} not supported"
+            ;;
+    esac
+
+}
+
+# react on -h or --help
+while getopts ":heicbdgvxsauzr" optchar; do
+    case "${optchar}" in
+        h)
+            _showusage "$0"
+            exit 0
+            ;;
+        c)
+            DONT_INSTALL_PKGS=1
+            ;;
+        *)
+            echo Invalid argument "$1"
+            _showusage "$0"
+            exit 1
+            ;;
+    esac
+done
+
+main
