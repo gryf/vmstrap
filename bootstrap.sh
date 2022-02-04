@@ -53,6 +53,7 @@ COMMON_RPM=(bash-completion
 
 COMMON_DEB=(exuberant-ctags
     flake8
+    inotify-tools
     python-apsw
     python3-flake8
     python3-jedi
@@ -168,7 +169,7 @@ function ubuntu {
             ;;
     esac
 
-    ## 0. hold - those doesn't matter, since we never get to the point when 
+    ## 0. hold - those doesn't matter, since we never get to the point when
     ## reboot is needed.
     #sudo apt-mark hold linux-headers-generic linux-headers-virtual \
     #    linux-image-virtual linux-virtual cryptsetup-initramfs \
