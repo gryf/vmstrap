@@ -357,7 +357,7 @@ function main {
 }
 
 # react on -h or --help
-while getopts ":heicbdgvxsauzr" optchar; do
+while getopts ":hc" optchar; do
     case "${optchar}" in
         h)
             _showusage "$0"
