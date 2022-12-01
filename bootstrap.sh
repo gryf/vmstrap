@@ -193,26 +193,29 @@ function ubuntu {
                 sudo pip install remote_pdb rainbow pdbpp
                 ;;
             '18.04')
-                sudo update-alternatives \
-                    --install /usr/bin/python python /usr/bin/python3.6 10
-                sudo update-alternatives \
-                    --install /usr/bin/pip pip /usr/bin/pip3 10
-                # 5.
                 sudo pip3 install pip --upgrade
                 sudo pip3 install remote_pdb rainbow pdbpp
                 ;;
             '20.04')
-                sudo update-alternatives \
-                    --install /usr/bin/python python /usr/bin/python3.8 10
-                sudo update-alternatives \
-                    --install /usr/bin/pip pip /usr/bin/pip3 10
-                # 5.
                 sudo pip3 install remote_pdb rainbow pdbpp
                 ;;
         esac
     fi
 
     # 5. change alternatives
+    case $DISTRO_R in
+        '18.04')
+            sudo update-alternatives \
+                --install /usr/bin/python python /usr/bin/python3.6 10
+            ;;
+        '20.04')
+            sudo update-alternatives \
+                --install /usr/bin/python python /usr/bin/python3.8 10
+            # 5.
+            ;;
+    esac
+
+    sudo update-alternatives --install /usr/bin/pip pip /usr/bin/pip3 10
     sudo update-alternatives --set editor /usr/bin/vim.basic
 
     # 6. copy configuration for bash, git, tmux
