@@ -54,7 +54,6 @@ COMMON_RPM=(bash-completion
 COMMON_DEB=(exuberant-ctags
     flake8
     inotify-tools
-    python-apsw
     python3-flake8
     python3-jedi
     rlwrap
@@ -189,14 +188,21 @@ function ubuntu {
         # 4.
         case $DISTRO_R in
             '16.04')
+                sudo apt install -y python-apsw
                 sudo pip install pip --upgrade
                 sudo pip install remote_pdb rainbow pdbpp
                 ;;
             '18.04')
+                sudo apt install -y python-apsw
                 sudo pip3 install pip --upgrade
                 sudo pip3 install remote_pdb rainbow pdbpp
                 ;;
             '20.04')
+                sudo apt install -y python-apsw
+                sudo pip3 install remote_pdb rainbow pdbpp
+                ;;
+            '22.04')
+                sudo apt install -y python3-apsw
                 sudo pip3 install remote_pdb rainbow pdbpp
                 ;;
         esac
@@ -212,6 +218,10 @@ function ubuntu {
             sudo update-alternatives \
                 --install /usr/bin/python python /usr/bin/python3.8 10
             # 5.
+            ;;
+        '22.04')
+            sudo update-alternatives \
+                --install /usr/bin/python python /usr/bin/python3.10 10
             ;;
     esac
 
