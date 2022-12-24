@@ -157,7 +157,7 @@ function ubuntu {
                 tmate
                 vim-gtk)
             ;;
-        '20.04')
+        '20.04'|'22.04')
             PGS=(ipython3
                 python3-pip
                 tmate
